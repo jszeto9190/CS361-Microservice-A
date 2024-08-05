@@ -52,7 +52,7 @@ def download_and_save_image(image_url, save_directory, timeout=5):
     except requests.exceptions.Timeout:
         app.logger.info(f"Image download has timed out: {image_url}")
     except Exception as e:
-        app.logger.info(f"An error has been experienced when attemping to download image: {image_url}, Error: {e}")
+        app.logger.info(f"An error has been experienced when attempting to download image: {image_url}, Error: {e}")
     return None
 
 @app.route('/')
@@ -63,7 +63,10 @@ def home():
 def generate_image():
     data = request.json
     text = data.get('text', '')
-    save_directory = data.get('save_directory', '/tmp')  # Default to /tmp if no directory provided
+    save_directory = data.get('save_directory', '/tmp/Pictures')  # Default to /tmp/Pictures if no directory provided
+
+    if not os.path.exists(save_directory):
+        os.makedirs(save_directory)
 
     search_results = search(text)
     image_urls = [item['link'] for item in search_results if 'link' in item]
@@ -85,7 +88,7 @@ def get_logs():
 
 @app.route('/download/<filename>')
 def download_file(filename):
-    return send_from_directory('/tmp', filename)
+    return send_from_directory('/tmp/Pictures', filename)
 
 @app.teardown_request
 def clear_logs_teardown(exception=None):
