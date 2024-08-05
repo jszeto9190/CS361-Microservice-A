@@ -63,7 +63,7 @@ if __name__ == "__main__":
     # Sample input for generating images
     text = "modern art"
     save_directory = "Pictures"
-    num_images = 5
+    num_images = 1
 
     # Ensure the save directory exists
     if not os.path.exists(save_directory):
