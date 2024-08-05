@@ -2,7 +2,7 @@ import os
 import re
 import logging
 from io import StringIO
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_from_directory
 from googleapiclient.discovery import build
 from dotenv import load_dotenv
 import requests
@@ -63,10 +63,7 @@ def home():
 def generate_image():
     data = request.json
     text = data.get('text', '')
-    save_directory = data.get('save_directory')
-
-    if not save_directory:
-        return jsonify({"error": "save_directory is required"}), 400
+    save_directory = data.get('save_directory', '/tmp')  # Default to /tmp if no directory provided
 
     search_results = search(text)
     image_urls = [item['link'] for item in search_results if 'link' in item]
@@ -85,6 +82,10 @@ def get_logs():
     log_stream.seek(0)
     log_contents = log_stream.read()
     return render_template('logs.html', logs=log_contents)
+
+@app.route('/download/<filename>')
+def download_file(filename):
+    return send_from_directory('/tmp', filename)
 
 @app.teardown_request
 def clear_logs_teardown(exception=None):
