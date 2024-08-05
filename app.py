@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from googleapiclient.discovery import build
 from dotenv import load_dotenv
 import requests
@@ -29,7 +29,7 @@ def download_and_save_image(image_url, save_directory):
 
 @app.route('/')
 def home():
-    return jsonify(message="This is Image Generation API. Use /generate-image to generate images.")
+    return render_template('index.html')
 
 @app.route('/generate-image', methods=['POST'])
 def generate_image():
