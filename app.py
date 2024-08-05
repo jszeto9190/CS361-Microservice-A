@@ -20,9 +20,9 @@ handler.setLevel(logging.INFO)
 app.logger.addHandler(handler)
 app.logger.setLevel(logging.INFO)
 
-def search(search_term):
+def search(search_term, num_images=10):
     custom_search = build("customsearch", "v1", developerKey=api_key)
-    res = custom_search.cse().list(q=search_term, cx=search_engine_id, searchType='image').execute()
+    res = custom_search.cse().list(q=search_term, cx=search_engine_id, searchType='image', num=num_images).execute()
     return res['items']
 
 def sanitize_filename(filename):
@@ -55,7 +55,7 @@ def download_and_save_image(image_url, save_directory, timeout=5):
     except requests.exceptions.Timeout:
         app.logger.info(f"Image download has timed out: {image_url}")
     except Exception as e:
-        app.logger.info(f"An error has been experienced when attempting to download image: {image_url}, Error: {e}")
+        app.logger.info(f"An error has been experienced when attemping to download image: {image_url}, Error: {e}")
     return None
 
 @app.route('/')
@@ -67,11 +67,12 @@ def generate_image():
     data = request.json
     text = data.get('text', '')
     save_directory = '/tmp/Pictures'  # Always use /tmp/Pictures on Heroku
+    num_images = int(data.get('num_images', 10))  # Default to 10 images if not provided
 
     if not os.path.exists(save_directory):
         os.makedirs(save_directory)
 
-    search_results = search(text)
+    search_results = search(text, num_images)
     image_urls = [item['link'] for item in search_results if 'link' in item]
 
     saved_images = [download_and_save_image(url, save_directory) for url in image_urls]

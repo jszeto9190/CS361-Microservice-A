@@ -3,7 +3,7 @@
 <head>
     <title>Image Generator</title>
     <meta charset="UTF-8">
-    <meta name="viewport" contents="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,6 +20,9 @@
         <label for="save_directory">Save Directory (required):</label>
         <input type="text" id="save_directory" name="save_directory" required>
         <br>
+        <label for="num_images">Number of Images (required):</label>
+        <input type="number" id="num_images" name="num_images" required>
+        <br>
         <button type="submit">Generate Images</button>
     </form>
 
@@ -27,34 +30,5 @@
     <div id="logs">
         <a href="/logs">View Logs</a>
     </div>
-
-    <script>
-        document.getElementById('image-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = {
-                text: document.getElementById('text').value,
-                save_directory: document.getElementById('save_directory').value
-            };
-            fetch('/generate-image', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            }).then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    return response.json().then(err => Promise.reject(err));
-                }
-            }).then(data => {
-                console.log(data);
-                alert('Images generated. Select "View Logs" for more information.');
-            }).catch(error => {
-                console.error(error);
-                alert('An error occurred. Select "View Logs" for more information.');
-            });
-        });
-    </script>
 </body>
 </html>

@@ -2,12 +2,13 @@ import requests
 import json
 import os
 
-def generate_images(text, save_directory):
+def generate_images(text, save_directory, num_images=10):
     api_url = 'https://microservice-a-cs361-c3c3bdb288e7.herokuapp.com/generate-image'
     
     payload = {
         "text": text,
-        "save_directory": save_directory
+        "save_directory": save_directory,
+        "num_images": num_images
     }
     headers = {
         "Content-Type": "application/json"
@@ -42,11 +43,12 @@ def download_image(filename, save_directory):
 
 # Example usage
 if __name__ == "__main__":
-    text = "car"
+    text = "Ralph"
     save_directory = "Pictures"  # Ensure this directory exists locally
+    num_images = 1  # Specify the number of images you want to generate
     if not os.path.exists(save_directory):
         os.makedirs(save_directory)
-    images = generate_images(text, save_directory)
+    images = generate_images(text, save_directory, num_images)
     if images and 'saved_images' in images:
         for image_path in images['saved_images']:
             filename = os.path.basename(image_path)  # Extract the filename from the path
