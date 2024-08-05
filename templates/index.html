@@ -8,9 +8,53 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
-    
 </head>
 <body>
- 
+    <h1>Image Generator</h1>
+
+    <h2>Generate Images</h2>
+    <form id="image-form">
+        <label for="text">Search Term (required):</label>
+        <input type="text" id="text" name="text" required>
+        <br>
+        <label for="save_directory">Save Directory (required):</label>
+        <input type="text" id="save_directory" name="save_directory" required>
+        <br>
+        <button type="submit">Generate Images</button>
+    </form>
+
+    <h2>Logs</h2>
+    <div id="logs">
+        <a href="/logs">View Logs</a>
+    </div>
+
+    <script>
+        document.getElementById('image-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = {
+                text: document.getElementById('text').value,
+                save_directory: document.getElementById('save_directory').value
+            };
+            fetch('/generate-image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            }).then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    return response.json().then(err => Promise.reject(err));
+                }
+            }).then(data => {
+                console.log(data);
+                alert('Images generated. Select "View Logs" for more information.');
+            }).catch(error => {
+                console.error(error);
+                alert('An error occurred. Select "View Logs" for more information.');
+            });
+        });
+    </script>
 </body>
 </html>
