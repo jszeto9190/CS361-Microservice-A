@@ -11,25 +11,32 @@ load_dotenv()
 
 app = Flask(__name__)
 
+# Hide API keys and search engine ID
 api_key = os.getenv('API_KEY')
 search_engine_id = os.getenv('SEARCH_ENGINE_ID')
 
+# Initialize log
 log_stream = StringIO()
 handler = logging.StreamHandler(log_stream)
 handler.setLevel(logging.INFO)
 app.logger.addHandler(handler)
 app.logger.setLevel(logging.INFO)
 
+# Initialize search function
 def search(search_term, num_images=10):
     custom_search = build("customsearch", "v1", developerKey=api_key)
     res = custom_search.cse().list(q=search_term, cx=search_engine_id, searchType='image', num=num_images).execute()
     return res['items']
 
+# Sanitize filenames to avoid premature parsing
 def sanitize_filename(filename):
+    # Replace percent-encoded characters with an underscore
     filename = re.sub(r'%[0-9A-Fa-f]{2}', '_', filename)
-    filename = re.sub(r'[<>:"/\\|?*]', '_', filename)
+    # Replace other problematic characters with an underscore
+    filename = re.sub(r'[:"/\\|<>?*]', '_', filename)
     return filename
 
+# Ensure the correct file extension
 def ensure_extension(filename, content_type):
     ext = os.path.splitext(filename)[1]
     if not ext:
@@ -44,10 +51,12 @@ def ensure_extension(filename, content_type):
     return filename
 
 def download_and_save_image(image_url, save_directory, timeout=5):
+    # Ensure the save directory exists
     if not os.path.exists(save_directory):
         os.makedirs(save_directory)
         
     try:
+        # Attempt to download the image
         response = requests.get(image_url, timeout=timeout)
         if response.status_code == 200:
             content_type = response.headers['Content-Type']
@@ -61,19 +70,20 @@ def download_and_save_image(image_url, save_directory, timeout=5):
     except requests.exceptions.Timeout:
         app.logger.info(f"Image download has timed out: {image_url}")
     except Exception as e:
-        app.logger.info(f"An error has been experienced when attemping to download image: {image_url}, Error: {e}")
+        app.logger.info(f"An error occurred while attempting to download the image: {image_url}, Error: {e}")
     return None
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
+# Generate images and save them to a directory
 @app.route('/generate-image', methods=['POST'])
 def generate_image():
     data = request.json
     text = data.get('text', '')
-    save_directory = '/tmp/Pictures'  # Always use /tmp/Pictures on Heroku
-    num_images = int(data.get('num_images', 10))  # Default to 10 images if not provided
+    save_directory = '/tmp/Pictures'
+    num_images = int(data.get('num_images', 10))
 
     if not os.path.exists(save_directory):
         os.makedirs(save_directory)
@@ -83,6 +93,7 @@ def generate_image():
 
     saved_images = [download_and_save_image(url, save_directory) for url in image_urls]
 
+    # Prepare the response
     response_data = {
         "saved_images": [img for img in saved_images if img is not None],
         "image_urls": image_urls
@@ -90,6 +101,7 @@ def generate_image():
 
     return jsonify(response_data)
 
+# Log the actions
 @app.route('/logs')
 def get_logs():
     log_stream.seek(0)
