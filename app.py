@@ -1,5 +1,4 @@
 import os
-import requests
 from flask import Flask, request, jsonify
 from googleapiclient.discovery import build
 from dotenv import load_dotenv
@@ -42,4 +41,5 @@ def generate_image():
     return jsonify(saved_images)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
