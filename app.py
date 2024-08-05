@@ -37,7 +37,10 @@ def webp_check(filename, content_type):
             filename += '.webp'
     return filename
 
-def download_and_save_image(image_url, save_directory, timeout=5):   
+def download_and_save_image(image_url, save_directory, timeout=5):
+    if not os.path.exists(save_directory):
+        os.makedirs(save_directory)
+        
     try:
         response = requests.get(image_url, timeout=timeout)
         if response.status_code == 200:
@@ -63,7 +66,7 @@ def home():
 def generate_image():
     data = request.json
     text = data.get('text', '')
-    save_directory = data.get('save_directory', '/tmp/Pictures')  # Default to /tmp/Pictures if no directory provided
+    save_directory = '/tmp/Pictures'  # Always use /tmp/Pictures on Heroku
 
     if not os.path.exists(save_directory):
         os.makedirs(save_directory)

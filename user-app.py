@@ -25,6 +25,9 @@ def generate_images(text, save_directory):
         return None
 
 def download_image(filename, save_directory):
+    if not os.path.exists(save_directory):
+        os.makedirs(save_directory)
+        
     download_url = f'https://microservice-a-cs361-c3c3bdb288e7.herokuapp.com/download/{filename}'
     response = requests.get(download_url)
     
@@ -40,11 +43,13 @@ def download_image(filename, save_directory):
 # Example usage
 if __name__ == "__main__":
     text = "car"
-    save_directory = "Pictures"  # Specify the save directory as Pictures in the root
+    save_directory = "Pictures"  # Ensure this directory exists locally
+    if not os.path.exists(save_directory):
+        os.makedirs(save_directory)
     images = generate_images(text, save_directory)
     if images and 'saved_images' in images:
         for image_path in images['saved_images']:
-            filename = image_path.split('/')[-1]  # Extract the filename from the path
+            filename = os.path.basename(image_path)  # Extract the filename from the path
             download_image(filename, save_directory)
     else:
         print("No images were generated.")
