@@ -30,11 +30,17 @@ def sanitize_filename(filename):
     filename = re.sub(r'[<>:"/\\|?*]', '_', filename)
     return filename
 
-def webp_check(filename, content_type):
+def ensure_extension(filename, content_type):
     ext = os.path.splitext(filename)[1]
     if not ext:
-        if 'image/webp' in content_type:
+        if 'image/jpeg' in content_type:
+            filename += '.jpg'
+        elif 'image/png' in content_type:
+            filename += '.png'
+        elif 'image/webp' in content_type:
             filename += '.webp'
+        elif 'image/gif' in content_type:
+            filename += '.gif'
     return filename
 
 def download_and_save_image(image_url, save_directory, timeout=5):
