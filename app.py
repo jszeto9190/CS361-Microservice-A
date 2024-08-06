@@ -108,9 +108,17 @@ def get_logs():
     log_contents = log_stream.read()
     return render_template('logs.html', logs=log_contents)
 
+#clear logs
+@app.route('/clear-logs', methods=['POST'])
+def clear_logs():
+    log_stream.truncate(0)
+    log_stream.seek(0)
+    return redirect(url_for('get_logs'))
+
+#save photos
 @app.route('/download/<filename>')
 def download_file(filename):
-    return send_from_directory('/tmp/Pictures', filename)
+    return send_from_directory('/Pictures', filename)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
