@@ -2,6 +2,8 @@ import requests
 import json
 import os
 
+#Please note: Only modify text, save_directory, and num_images under __main__.
+
 def generate_images(text, save_directory, num_images=10):
     # Define the API endpoint for generating images
     api_url = 'https://microservice-a-cs361-c3c3bdb288e7.herokuapp.com/generate-image'
@@ -61,8 +63,8 @@ def download_image(filename, save_directory):
 
 if __name__ == "__main__":
     # Sample input for generating images
-    text = "modern" # MODIFY THIS SEARCH TERM
-    save_directory = "Pictures" # MODIFY THIS FILE NAME
+    text = "oregon state university" # MODIFY THIS SEARCH TERM
+    save_directory = "Pictures" # MODIFY THIS FOLDER NAME
     num_images = 2 # MODIFY THIS IMAGE AMOUNT (MAX 10 IMAGES)
 
     # Ensure the save directory exists
