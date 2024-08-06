@@ -1,4 +1,5 @@
 # CS361-Microservice-A: Image Generator Microservice
+This microservice allows you to generate and download images based on a user-defined search term. It uses the Google Custom Search API to find images and then provides endpoints to generate images, view logs, and download images.
 
 ## How to Request Data
 1. Download user-app.py and save it to the folder location of your choice.
