@@ -23,7 +23,7 @@ def generate_images(text, save_directory, num_images=10):
         
         # Check if the request was successful
         if response.status_code == 200:
-            response_data = response.json()
+            response_data = response.json() #URL DATA AND FILE LOCATION DATA STORED HERE
             print("Successfully generated images:")  
             print(json.dumps(response_data, indent=2))
             return response_data
@@ -61,9 +61,9 @@ def download_image(filename, save_directory):
 
 if __name__ == "__main__":
     # Sample input for generating images
-    text = "modern art"
-    save_directory = "Pictures"
-    num_images = 1
+    text = "modern" # MODIFY THIS SEARCH TERM
+    save_directory = "Pictures" # MODIFY THIS FILE NAME
+    num_images = 2 # MODIFY THIS IMAGE AMOUNT (MAX 10 IMAGES)
 
     # Ensure the save directory exists
     if not os.path.exists(save_directory):
