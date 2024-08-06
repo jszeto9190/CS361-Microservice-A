@@ -37,7 +37,7 @@ def sanitize_filename(filename):
     return filename
 
 # Ensure the correct file extension
-def ensure_extension(filename, content_type):
+def check_extension(filename, content_type):
     ext = os.path.splitext(filename)[1]
     if not ext:
         if 'image/jpeg' in content_type:
@@ -61,7 +61,7 @@ def download_and_save_image(image_url, save_directory, timeout=5):
         if response.status_code == 200:
             content_type = response.headers['Content-Type']
             sanitized_filename = sanitize_filename(image_url.split("/")[-1].split('?')[0])
-            sanitized_filename = ensure_extension(sanitized_filename, content_type)
+            sanitized_filename = check_extension(sanitized_filename, content_type)
             image_name = os.path.join(save_directory, sanitized_filename)
             app.logger.info(f"The image has been saved to the following location: {image_name}")
             with open(image_name, 'wb') as f:
