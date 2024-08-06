@@ -118,7 +118,7 @@ def clear_logs():
 #save photos
 @app.route('/download/<filename>')
 def download_file(filename):
-    return send_from_directory('/Pictures', filename)
+    return send_from_directory('/tmp/Pictures', filename)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
