@@ -19,14 +19,15 @@
    python user-app.py
    ```
 ## How to Receive Data
-1. Image source URL and file location data are stored under response_data. This information is also printed in the terminal. The generated images will appear in the save_directory folder.  
+1. Image source URL and file location data are stored under response_data. This information is also printed in the terminal. 
    ![image](https://github.com/user-attachments/assets/e50704ae-d13c-4b0c-8737-c0ce527220bd)
    
+   The generated images will appear in the save_directory folder.  
    ![image](https://github.com/user-attachments/assets/31269445-2e1c-4d0d-b2d8-8ff31b399783)  
 
 
 ## How to View Logs
-The user may want to understand what is happening on the backend of the microservice. If so, visit https://microservice-a-cs361-c3c3bdb288e7.herokuapp.com/ and select 'View Logs'.
+You may want to understand what is happening on the backend of the microservice. If so, visit https://microservice-a-cs361-c3c3bdb288e7.herokuapp.com/ and select 'View Logs'.
 
 ## UML Sequence Diagram
 ![UML Sequence Diagram](https://github.com/user-attachments/assets/353948dd-5a9a-4a43-988f-0e549bc8ad28)
