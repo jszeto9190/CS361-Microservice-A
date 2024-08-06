@@ -112,11 +112,6 @@ def get_logs():
 def download_file(filename):
     return send_from_directory('/tmp/Pictures', filename)
 
-@app.teardown_request
-def clear_logs_teardown(exception=None):
-    log_stream.truncate(0)
-    log_stream.seek(0)
-
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
